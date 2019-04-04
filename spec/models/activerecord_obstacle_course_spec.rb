@@ -126,7 +126,6 @@ describe 'ActiveRecord Obstacle Course' do
 
     # ------------------ Using ActiveRecord ----------------------
     items = Item.where(id: ids_to_find)
-
     # ------------------------------------------------------------
 
     # Expectation
@@ -259,7 +258,6 @@ describe 'ActiveRecord Obstacle Course' do
     # ------------------------------------------------------------
 
     # ------------------ Using ActiveRecord ----------------------
-    # binding.pry
     items = Item.where.not(id: items_not_included)
     # ------------------------------------------------------------
 
@@ -328,10 +326,6 @@ describe 'ActiveRecord Obstacle Course' do
     # ------------------------------------------------------------
 
     # ------------------ Using ActiveRecord ----------------------
-
-    # names = OrderItem.all.inject([]) do |array,record|
-    #   array << Item.find(record.item_id).name
-    # end
     names =  Order.joins(:items).select("orders.*, items.name").pluck(:name)
     # ------------------------------------------------------------
 
@@ -372,7 +366,6 @@ describe 'ActiveRecord Obstacle Course' do
 
      users = User.joins(:orders,:items).select("users.*,items.id").group("users.name").where("items.id": @item_8.id).pluck(:name)
 
-    # Order.order("order_items.id").includes(:items).pluck(:name)
     # ------------------------------------------------------------
 
     # Expectation
@@ -412,7 +405,6 @@ describe 'ActiveRecord Obstacle Course' do
     # ------------------------------------------------------------
 
     # ------------------ Using ActiveRecord ----------------------
-
     items_for_user_3_third_order = Order.where(user_id: @user_3.id).third.items.pluck(:name)
     # ------------------------------------------------------------
 
@@ -530,7 +522,6 @@ describe 'ActiveRecord Obstacle Course' do
   it '25. returns items that are associated with one or more orders' do
     unordered_item = Item.create(name: 'Unordered Item')
     expected_result = [@item_1, @item_4, @item_9, @item_2, @item_5, @item_10, @item_3, @item_8, @item_7]
-    #where did the honey go???
     # ----------------------- Using Ruby -------------------------
     items = Item.all
 
@@ -584,10 +575,7 @@ describe 'ActiveRecord Obstacle Course' do
     # ------------------------------------------------------------
 
     # ------------------ ActiveRecord Solution ----------------------
-    # ordered_items_names = Item.where.not("items.name LIKE (?)", 'Unordered%').where.not(name: @item_6.name).pluck(:name)
-    # ordered_items_names = Item.where.not("items.name = ? OR items.name LIKE 'Unor%'","Honey").pluck(:name)
     ordered_items_names = Item.where.not("items.name LIKE (?)", 'Unordered%').where.not(name: @item_6.name).pluck(:name)
-    # Solution goes here
     # When you find a solution, experiment with adjusting your method chaining
     # Which ones are you able to switch around without relying on Ruby's Enumerable methods?
     # ---------------------------------------------------------------
@@ -703,7 +691,7 @@ describe 'ActiveRecord Obstacle Course' do
     expect([data[14].user_name,data[14].order_id,data[14].avg_item_cost]).to eq([@user_2.name, @order_14.id, 225])
   end
 
-  xit '30. returns the names of items that have been ordered without n+1 queries' do
+  it '30. returns the names of items that have been ordered without n+1 queries' do
     # What is an n+1 query?
     # This video is older, but the concepts explained are still relevant:
     # http://railscasts.com/episodes/372-bullet
@@ -714,7 +702,7 @@ describe 'ActiveRecord Obstacle Course' do
     Bullet.start_request
 
     # ------------------------------------------------------
-    orders = Order.all # Edit only this line
+    orders = Order.includes(:items)
     # ------------------------------------------------------
 
     # Do not edit below this line
