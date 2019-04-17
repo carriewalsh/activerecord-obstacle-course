@@ -575,7 +575,7 @@ describe 'ActiveRecord Obstacle Course' do
     # ------------------------------------------------------------
 
     # ------------------ ActiveRecord Solution ----------------------
-    ordered_items_names = Item.where.not("items.name LIKE (?)", 'Unordered%').where.not(name: @item_6.name).pluck(:name)
+    ordered_items_names = Item.joins(:order_items).select("items.*").distinct.order(:id).pluck(:name)
     # When you find a solution, experiment with adjusting your method chaining
     # Which ones are you able to switch around without relying on Ruby's Enumerable methods?
     # ---------------------------------------------------------------
