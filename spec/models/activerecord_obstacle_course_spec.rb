@@ -86,7 +86,7 @@ describe 'ActiveRecord Obstacle Course' do
     # ------------------------------------------------------------
 
     # ------------------ Using ActiveRecord ----------------------
-    order_id = Order.order(:amount => :desc).first.id
+    order_id = Order.order(amount: :desc).first.id
     # Your solution should not contain the ID of the order anywhere
     # ------------------------------------------------------------
 
@@ -106,8 +106,8 @@ describe 'ActiveRecord Obstacle Course' do
     # ------------------------------------------------------------
 
     # ------------------ Using ActiveRecord ----------------------
-    orders_of_500_and_700 = Order.all.where("amount = 500 OR amount = 700")
-    orders_of_700_and_1000 = Order.all.where("amount = 700 OR amount = 1000")
+    orders_of_500_and_700 = Order.where("amount = 500 OR amount = 700")
+    orders_of_700_and_1000 = Order.where("amount = 700 OR amount = 1000")
 
     # ------------------------------------------------------------
 
@@ -326,7 +326,7 @@ describe 'ActiveRecord Obstacle Course' do
     # ------------------------------------------------------------
 
     # ------------------ Using ActiveRecord ----------------------
-    names =  Order.joins(:items).select("orders.*, items.name").pluck(:name)
+    names =  Order.joins(:items).pluck(:name)
     # ------------------------------------------------------------
 
     # Expectation
@@ -364,7 +364,7 @@ describe 'ActiveRecord Obstacle Course' do
 
     # ------------------ Using ActiveRecord ----------------------
 
-     users = User.joins(:orders,:items).select("users.*,items.id").group("users.name").where("items.id": @item_8.id).pluck(:name)
+     users = User.joins(:orders,:items).group("users.name").where("items.id": @item_8.id).pluck(:name)
 
     # ------------------------------------------------------------
 
@@ -511,7 +511,7 @@ describe 'ActiveRecord Obstacle Course' do
     # -----------------------------------------------------------
 
     # ------------------ Improved Solution ----------------------
-    orders = Order.all.where(user_id: @user_2.id).joins(:items).where("items.id": @item_4.id)
+    orders = Order.where(user_id: @user_2.id).joins(:items).where("items.id": @item_4.id)
 
     # -----------------------------------------------------------
 
@@ -575,7 +575,7 @@ describe 'ActiveRecord Obstacle Course' do
     # ------------------------------------------------------------
 
     # ------------------ ActiveRecord Solution ----------------------
-    ordered_items_names = Item.joins(:order_items).select("items.*").distinct.order(:id).pluck(:name)
+    ordered_items_names = Item.joins(:order_items).distinct.order(:id).pluck(:name)
     # When you find a solution, experiment with adjusting your method chaining
     # Which ones are you able to switch around without relying on Ruby's Enumerable methods?
     # ---------------------------------------------------------------
