@@ -533,7 +533,7 @@ describe 'ActiveRecord Obstacle Course' do
     # ------------------------------------------------------------
 
     # ------------------ ActiveRecord Solution ----------------------
-    ordered_items = Item.where.not(name: "Unordered Item").where.not(name: @item_6.name)
+    ordered_items = Item.joins(:order_items).select("items.*").distinct.order(:id)
     # ---------------------------------------------------------------
 
     # Expectations
